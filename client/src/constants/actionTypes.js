@@ -1,0 +1,16 @@
+export const CREATE = 'CREATE';
+export const UPDATE = 'UPDATE';
+export const DELETE = 'DELETE';
+export const FETCH_ALL = 'FETCH_ALL';
+export const LIKE = 'LIKE';
+export const SET_POSTS_LOADING = 'SET_POSTS_LOADING';
+export const SET_POSTS_ERROR = 'SET_POSTS_ERROR';
+export const SET_FILTERS = 'SET_FILTERS';
+export const SET_DASHBOARD = 'SET_DASHBOARD';
+export const SET_ALBUMS = 'SET_ALBUMS';
+export const AUTH = 'AUTH';
+export const AUTH_LOADING = 'AUTH_LOADING';
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const LOGOUT = 'LOGOUT';
+export const PROFILE_UPDATED = 'PROFILE_UPDATED';
+export const STORAGE_UPDATED = 'STORAGE_UPDATED';
