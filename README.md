@@ -189,6 +189,33 @@ flowchart TB
 *Note: This diagram describes the intended architecture. Keep only the technologies and features that are actually implemented and configured in your project.*
 
 
+## System Architecture
+
+```text
+                    +---------------------------+
+                    |       Client Browser      |
+                    |      (React / Redux)       |
+                    +---------------------------+
+                                |
+                                |
+                       HTTP / REST API (JSON)
+                                |
+                                v
+                    +---------------------------+
+                    |      Node.js / Express    |
+                    |        Backend API        |
+                    +---------------------------+
+                         |          |          |
+                         |          |          |
+                  Mongoose ORM    Nodemailer   Cloudinary SDK
+                         |          |          |
+                         v          v          v
+              +----------------+ +----------------+ +----------------+
+              |    MongoDB     | |   Gmail SMTP   | |   Cloudinary   |
+              | Database       | | Email Delivery | | Media Storage  |
+              |                | |                | | CDN / Images   |
+              +----------------+ +----------------+ +----------------+
+```
 
 
 ## System Architecture
