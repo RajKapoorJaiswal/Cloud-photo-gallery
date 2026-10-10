@@ -1,8 +1,20 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
-const accessSecret = () => process.env.JWT_SECRET || 'development-access-secret';
-const refreshSecret = () => process.env.JWT_REFRESH_SECRET || `${accessSecret()}-refresh`;
+const accessSecret = () => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is not configured.');
+  }
+  return process.env.JWT_SECRET;
+};
+
+const refreshSecret = () => {
+  if (!process.env.JWT_REFRESH_SECRET) {
+    throw new Error('JWT_REFRESH_SECRET is not configured.');
+  }
+  return process.env.JWT_REFRESH_SECRET;
+};
+
 
 export const createRandomToken = () => crypto.randomBytes(32).toString('hex');
 

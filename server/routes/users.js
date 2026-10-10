@@ -36,14 +36,14 @@ import {
 } from '../controllers/users.js';
 import { auth } from '../middleware/auth.js';
 import { optionalAuth } from '../middleware/auth.js';
+import { authRateLimit } from '../middleware/security.js';
 
 const router = express.Router();
-
-router.post('/signin', signin);
-router.post('/signup', signup);
+router.post('/signin', authRateLimit(10), signin);
+router.post('/signup', authRateLimit(10), signup);
 router.get('/oauth/:provider', oauthStart);
 router.get('/oauth/:provider/callback', oauthCallback);
-router.post('/refresh', refreshSession);
+router.post('/refresh', authRateLimit(10), refreshSession);
 router.post('/logout', auth, logout);
 router.post('/logout-all', auth, logoutAll);
 router.get('/me', auth, me);
@@ -61,10 +61,10 @@ router.get('/storage', auth, storageUsage);
 router.get('/backup', auth, exportBackup);
 router.post('/restore', auth, restoreBackup);
 router.post('/verify-email', verifyEmail);
-router.post('/otp/send', sendOtp);
-router.post('/otp/verify', verifyOtp);
-router.post('/forgot-password', forgotPassword);
-router.post('/reset-password', resetPassword);
+router.post('/otp/send', authRateLimit(5), sendOtp);
+router.post('/otp/verify', authRateLimit(10), verifyOtp);
+router.post('/forgot-password', authRateLimit(5), forgotPassword);
+router.post('/reset-password', authRateLimit(5), resetPassword);
 router.patch('/change-password', auth, changePassword);
 router.delete('/account', auth, deleteAccount);
 router.post('/block/:id', auth, blockUser);

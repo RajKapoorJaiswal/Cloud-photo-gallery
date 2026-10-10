@@ -122,7 +122,10 @@ export const signin = async (req, res) => {
 
   const existingUser = await User.findOne({ email: email.toLowerCase(), deletedAt: null }).select('+password');
 
-  if (!existingUser) return res.status(404).json({ message: "User doesn't exist." });
+
+  if (!existingUser) {
+  return res.status(401).json({ message: 'Invalid credentials.' });
+}
 
   const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
 
@@ -160,26 +163,50 @@ export const signup = async (req, res) => {
     emailVerificationToken: verificationToken,
     emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
   });
+  const authPayload = await buildAuthPayload(result, rememberMe);
 
-  return res.status(201).json({
-    ...(await buildAuthPayload(result, rememberMe)),
-    verificationToken,
-    message: 'Account created. Use the verification token from this response in development to verify email.',
-  });
+return res.status(201).json({
+  ...authPayload,
+  ...(process.env.NODE_ENV !== 'production' ? { verificationToken } : {}),
+  message: 'Account created. Please verify your email address.',
+});
 };
 
 export const refreshSession = async (req, res) => {
-  const { refreshToken } = req.body;
-  if (!refreshToken) return res.status(400).json({ message: 'Refresh token is required.' });
+  try {
+    const { refreshToken } = req.body;
 
-  const decoded = verifyRefreshToken(refreshToken);
-  const user = await User.findById(decoded.id);
-  const stored = user?.refreshTokens?.find((item) => item.token === refreshToken && item.expiresAt > new Date());
+    if (!refreshToken || typeof refreshToken !== 'string') {
+      return res.status(400).json({
+        message: 'Refresh token is required.',
+      });
+    }
 
-  if (!user || !stored || user.deletedAt) return res.status(401).json({ message: 'Refresh session expired.' });
+    const decoded = verifyRefreshToken(refreshToken);
+    const user = await User.findById(decoded.id);
 
-  return res.status(200).json(await buildAuthPayload(user, decoded.rememberMe));
+    const stored = user?.refreshTokens?.find(
+      (item) =>
+        item.token === refreshToken &&
+        item.expiresAt > new Date()
+    );
+
+    if (!user || !stored || user.deletedAt) {
+      return res.status(401).json({
+        message: 'Refresh session expired.',
+      });
+    }
+
+    return res.status(200).json(
+      await buildAuthPayload(user, decoded.rememberMe)
+    );
+  } catch (error) {
+    return res.status(401).json({
+      message: 'Refresh session expired.',
+    });
+  }
 };
+
 
 export const logout = async (req, res) => {
   const { refreshToken } = req.body;
