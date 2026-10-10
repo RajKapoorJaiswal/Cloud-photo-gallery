@@ -121,28 +121,9 @@ Traditional photo storage solutions are often fragmented across multiple devices
 - **Cloudinary Integration:** Cloudinary SDK support for cloud CDN delivery and image transformations.
 
 ---
+
 <img width="1536" height="1024" alt="Cloud Photo Gallery Architecture" src="https://github.com/user-attachments/assets/d215acd3-20cd-4623-a430-b3cae10f61cf" />
 
-
-
-### 🔄 Request Flow
-
-1. **User Interaction:** Users browse photos, upload images, manage albums, and share content through the React interface.
-2. **API Communication:** The frontend sends requests to the Node.js and Express backend.
-3. **Data Management:** MongoDB stores application records and photo metadata.
-4. **Email Delivery:** The backend uses Nodemailer and SMTP for supported email workflows.
-5. **Media Management:** Cloudinary handles image uploads, delivery, and transformations when configured.
-
-### 🛠️ Technology Stack
-
-| Layer | Technologies |
-|---|---|
-| Frontend | React, Redux |
-| Backend | Node.js, Express.js |
-| Database | MongoDB, Mongoose |
-| Email | Nodemailer, SMTP |
-| Media Storage | Cloudinary |
-| Communication | REST API, JSON |
 
 ## Prerequisites
 
