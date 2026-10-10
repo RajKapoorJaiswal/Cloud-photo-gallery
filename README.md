@@ -121,6 +121,75 @@ Traditional photo storage solutions are often fragmented across multiple devices
 - **Cloudinary Integration:** Cloudinary SDK support for cloud CDN delivery and image transformations.
 
 ---
+## 🏗️ System Architecture
+
+Cloud Photo Gallery follows a modular full-stack architecture connecting the frontend, backend API, database, email service, and cloud media storage.
+
+```mermaid
+flowchart TB
+    U(["👤 User / Web Browser"])
+
+    subgraph FRONTEND["💻 Frontend Layer"]
+        FE["React Application<br/>User Interface · Photo Gallery<br/>Albums · Search · Sharing"]
+        STATE["Redux<br/>State Management"]
+        FE <--> STATE
+    end
+
+    API["🔐 Node.js + Express<br/>REST API · Authentication<br/>Photo & Album Operations"]
+
+    subgraph SERVICES["☁️ External Services"]
+        DB[("🍃 MongoDB<br/>Users · Albums · Photo Metadata")]
+        MAIL["✉️ Nodemailer + SMTP<br/>Verification · Password Reset OTP"]
+        MEDIA["🖼️ Cloudinary<br/>Media Storage · CDN · Transformations"]
+    end
+
+    U --> FE
+    FE <-->|"HTTPS / JSON API"| API
+    API <-->|"Mongoose Queries"| DB
+    API -->|"Send Emails"| MAIL
+    API <-->|"Upload / Retrieve Media"| MEDIA
+
+    classDef user fill:#e0f2fe,stroke:#0284c7,color:#0c2d48,stroke-width:2px
+    classDef frontend fill:#dbeafe,stroke:#2563eb,color:#172554,stroke-width:2px
+    classDef backend fill:#d1fae5,stroke:#059669,color:#064e3b,stroke-width:2px
+    classDef database fill:#ede9fe,stroke:#7c3aed,color:#3b0764,stroke-width:2px
+    classDef email fill:#ffedd5,stroke:#ea580c,color:#7c2d12,stroke-width:2px
+    classDef storage fill:#cffafe,stroke:#0891b2,color:#164e63,stroke-width:2px
+
+    class U user
+    class FE,STATE frontend
+    class API backend
+    class DB database
+    class MAIL email
+    class MEDIA storage
+
+    style FRONTEND fill:#f8fbff,stroke:#93c5fd,stroke-width:1px
+    style SERVICES fill:#fafafa,stroke:#cbd5e1,stroke-width:1px
+```
+
+### 🔄 Request Flow
+
+1. **User Interaction:** Users browse photos, upload images, manage albums, and share content through the React interface.
+2. **API Communication:** The frontend sends requests to the Node.js and Express backend.
+3. **Data Management:** MongoDB stores application records and photo metadata.
+4. **Email Delivery:** The backend uses Nodemailer and SMTP for supported email workflows.
+5. **Media Management:** Cloudinary handles image uploads, delivery, and transformations when configured.
+
+### 🛠️ Technology Stack
+
+| Layer | Technologies |
+|---|---|
+| Frontend | React, Redux |
+| Backend | Node.js, Express.js |
+| Database | MongoDB, Mongoose |
+| Email | Nodemailer, SMTP |
+| Media Storage | Cloudinary |
+| Communication | REST API, JSON |
+
+*Note: This diagram describes the intended architecture. Keep only the technologies and features that are actually implemented and configured in your project.*
+
+
+
 
 ## System Architecture
 
